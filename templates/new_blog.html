@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Write a post — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <span class="auth-badge">{% if current_admin %}Site owner{% else %}Your post{% endif %}</span>
+    <h1>Write a post</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ action_url }}" class="apply-form">
+      <label for="title">Title</label>
+      <input type="text" id="title" name="title" value="{{ form.get('title', '') }}" required>
+
+      <label for="body">Post content</label>
+      <textarea id="body" name="body" rows="12" required placeholder="Write in plain paragraphs — a blank line starts a new paragraph.">{{ form.get('body', '') }}</textarea>
+
+      <div class="apply-form-actions">
+        <button type="submit" class="btn btn-primary">Publish</button>
+        <a href="{{ back_url }}" class="apply-official-link">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

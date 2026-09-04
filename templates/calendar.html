@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% from "_macros.html" import apply_button with context %}
+{% block title %}Calendar — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">FULL SEASON</p>
+    <h1>The year, month by month</h1>
+    <p class="page-head-sub">Search, filter by focus or prize type, then click through for the official dates and application links.</p>
+
+    <div class="search-bar">
+      <input type="text" id="search-input" class="search-input" placeholder="Search by keyword (e.g. Gemini, AI, India)...">
+      <select id="prize-filter" class="prize-filter">
+        <option value="all">All prize types</option>
+        <option value="cash">Cash Prize</option>
+        <option value="stipend">Stipend / Paid</option>
+        <option value="swag">Swag / Certificate</option>
+        <option value="unpaid">Unpaid / Volunteer</option>
+      </select>
+    </div>
+
+    <div class="filter-bar" role="group" aria-label="Filter events by category">
+      <button class="filter-btn {% if initial_filter == 'all' %}is-active{% endif %}" data-filter="all">All programs</button>
+      <button class="filter-btn {% if initial_filter == 'women_in_tech' %}is-active{% endif %}" data-filter="women_in_tech">Women in Tech</button>
+      <button class="filter-btn {% if initial_filter == 'open_source' %}is-active{% endif %}" data-filter="open_source">Open Source</button>
+      <button class="filter-btn {% if initial_filter == 'contest' %}is-active{% endif %}" data-filter="contest">Hackathon</button>
+    </div>
+
+    <p class="no-results-msg" id="no-results-msg" style="display:none;">No programs match your search — try a different keyword or filter.</p>
+  </div>
+</section>
+
+<section class="section calendar-section">
+  <div class="wrap">
+    {% for month in month_order %}
+      {% set events = events_by_month[month] %}
+      {% if events %}
+      <div class="month-block {% if month == current_month %}is-current-month{% endif %}">
+        <div class="month-label">
+          <span class="month-number">{{ '%02d' % loop.index }}</span>
+          <h2>{{ month }}{% if month == current_month %} <span class="now-flag">NOW</span>{% endif %}</h2>
+        </div>
+
+        <div class="fixture-list">
+          {% for event in events %}
+          <article class="fixture" data-kind="{{ event.kind }}" data-search="{{ (event.name ~ ' ' ~ event.summary ~ ' ' ~ event.window)|lower }}">
+            <div class="fixture-date">{{ event.month }}</div>
+            <div class="fixture-body">
+              <div class="fixture-top">
+                <h3><a href="{{ url_for('program_detail', event_id=event.id) }}">{{ event.name }}</a></h3>
+                <span class="tag tag-{{ event.kind }}">{{ {'women_in_tech': 'Women in Tech', 'open_source': 'Open Source', 'contest': 'Hackathon'}[event.kind] if event.kind in ('women_in_tech','open_source','contest') else 'Open Source' }}</span>
+              </div>
+              <p class="fixture-window">{{ event.window }} &middot; {{ event.format }}</p>
+              <p class="fixture-summary">{{ event.summary }}</p>
+              <div class="fixture-actions">
+                {{ apply_button(event, css_class="btn btn-apply", next_url=url_for('calendar')) }}
+                <div class="add-to-cal">
+                  <button type="button" class="btn btn-outline btn-small add-to-cal-toggle">+ Calendar</button>
+                  <div class="add-to-cal-menu">
+                    <a href="{{ calendar_links[event.id].google_url }}" target="_blank" rel="noopener">Google Calendar</a>
+                    <a href="{{ calendar_links[event.id].ics_url }}">Apple / Outlook (.ics)</a>
+                  </div>
+                </div>
+                <a href="{{ event.link }}" target="_blank" rel="noopener" class="event-link">Official site &rarr;</a>
+              </div>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+<script src="{{ url_for('static', filename='js/filter.js') }}"></script>
+{% endblock %}

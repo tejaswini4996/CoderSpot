@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Admin login — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap auth-wrap">
+    <span class="auth-badge">Site owner</span>
+    <h1>Admin login</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap auth-wrap">
+    <div class="auth-card">
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" class="apply-form">
+        <label for="email">Admin email</label>
+        <input type="email" id="email" name="email" value="{{ email }}" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+
+        <div class="apply-form-actions">
+          <button type="submit" class="btn btn-primary">Log in</button>
+        </div>
+      </form>
+    </div>
+
+    <p class="auth-switch">No admin account yet? Run <code>python create_admin.py</code> from the project folder.</p>
+  </div>
+</section>
+
+{% endblock %}

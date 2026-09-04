@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Unsubscribed — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">UNSUBSCRIBED</p>
+    <h1>You won't receive any more monthly emails</h1>
+    <p class="page-head-sub">You can resubscribe any time from your account page.</p>
+    <p><a href="{{ url_for('home') }}" class="btn btn-outline">Back to CoderSpot</a></p>
+  </div>
+</section>
+
+{% endblock %}

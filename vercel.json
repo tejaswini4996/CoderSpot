@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "app.py",
+      "use": "@vercel/python",
+      "config": {
+        "includeFiles": ["templates/**", "static/**", "data/**"]
+      }
+    }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "app.py" }
+  ],
+  "crons": [
+    {
+      "path": "/cron/newsletter-check?key=REPLACE_WITH_YOUR_CRON_SECRET",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}

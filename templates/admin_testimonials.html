@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Review Testimonials — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">SITE OWNER VIEW</p>
+    <h1>Review testimonials</h1>
+    <p class="page-head-sub">
+      Approve a testimonial to make it visible on the public Testimonials
+      page and home page. This page isn't password-protected yet &mdash;
+      see the README before going live.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if testimonials %}
+    <div class="admin-testimonial-list">
+      {% for t in testimonials %}
+      <div class="admin-testimonial-row">
+        <div class="admin-testimonial-body">
+          <div class="admin-testimonial-top">
+            <strong>{{ t.name }}</strong>
+            {% if t.program_name %}<span class="testimonial-program">{{ t.program_name }}</span>{% endif %}
+            {% if t.approved %}
+              <span class="tag tag-success">Approved</span>
+            {% else %}
+              <span class="tag tag-pending">Pending</span>
+            {% endif %}
+          </div>
+          <p class="testimonial-message-admin">&ldquo;{{ t.message }}&rdquo;</p>
+          <span class="mono">{{ t.submitted_at }}</span>
+        </div>
+        <div class="admin-testimonial-actions">
+          {% if not t.approved %}
+          <form method="POST" action="{{ url_for('approve_testimonial', testimonial_id=t.id) }}">
+            <button type="submit" class="btn btn-apply">Approve</button>
+          </form>
+          {% endif %}
+          <form method="POST" action="{{ url_for('delete_testimonial', testimonial_id=t.id) }}">
+            <button type="submit" class="btn btn-outline">Delete</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>No testimonials submitted yet.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

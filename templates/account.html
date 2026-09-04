@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}My account — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">MY ACCOUNT</p>
+    <h1>Hi, {{ user.name }}</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="account-card">
+      <div class="account-row">
+        <span>Name</span>
+        <span>{{ user.name }}</span>
+      </div>
+      <div class="account-row">
+        <span>Email</span>
+        <span>{{ user.email }}</span>
+      </div>
+      <div class="account-row">
+        <span>Member since</span>
+        <span>{{ user.created_at }}</span>
+      </div>
+
+      <div class="subscription-status">
+        <div>
+          <strong>Monthly email</strong>
+          <p style="margin:4px 0 0;">
+            {% if user.subscribed %}You're subscribed to the monthly roundup.{% else %}You're currently unsubscribed.{% endif %}
+          </p>
+        </div>
+        <form method="POST" action="{{ url_for('toggle_subscription') }}">
+          <button type="submit" class="btn btn-outline">
+            {% if user.subscribed %}Unsubscribe{% else %}Subscribe{% endif %}
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <p style="margin-top:24px;"><a href="{{ url_for('logout') }}">Log out</a></p>
+
+    <div class="section-head" style="margin-top:48px;">
+      <p class="eyebrow">YOUR POSTS</p>
+      <h2>Blog posts you've written</h2>
+      <a href="{{ url_for('write_post') }}" class="btn btn-primary">+ Write a new post</a>
+    </div>
+
+    {% if posts %}
+    <div class="admin-testimonial-list">
+      {% for post in posts %}
+      <div class="admin-testimonial-row">
+        <div class="admin-testimonial-body">
+          <strong>{{ post.title }}</strong>
+          <p class="mono" style="margin:6px 0;">{{ post.published_at }} &middot; /blog/{{ post.slug }}</p>
+        </div>
+        <div class="admin-testimonial-actions">
+          <a href="{{ url_for('blog_post', slug=post.slug) }}" target="_blank" class="btn btn-outline">View</a>
+          <form method="POST" action="{{ url_for('delete_own_post', post_id=post.id) }}">
+            <button type="submit" class="btn btn-outline">Delete</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>You haven't written anything yet.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

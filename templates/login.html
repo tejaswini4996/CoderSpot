@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Log in — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap auth-wrap">
+    <p class="eyebrow">WELCOME BACK</p>
+    <h1>Log in</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap auth-wrap">
+    <div class="auth-card">
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% if google_configured or github_configured %}
+      <div class="oauth-buttons">
+        {% if google_configured %}
+        <a href="{{ url_for('login_google') }}" class="btn btn-outline btn-oauth">Continue with Google</a>
+        {% endif %}
+        {% if github_configured %}
+        <a href="{{ url_for('login_github') }}" class="btn btn-outline btn-oauth">Continue with GitHub</a>
+        {% endif %}
+      </div>
+      <div class="auth-divider"><span>or</span></div>
+      {% endif %}
+
+      <form method="POST" class="apply-form">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="{{ email }}" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+
+        <div class="apply-form-actions">
+          <button type="submit" class="btn btn-primary">Log in</button>
+        </div>
+      </form>
+    </div>
+
+    <p class="auth-switch">New here? <a href="{{ url_for('signup') }}">Create an account</a></p>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap" style="max-width:720px;">
+    <p class="eyebrow">By {{ post.author_name }} &middot; {{ post.published_at }}</p>
+    <h1>{{ post.title }}</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap" style="max-width:720px;">
+    {% for paragraph in post.body.split('\n') if paragraph.strip() %}
+    <p>{{ paragraph }}</p>
+    {% endfor %}
+
+    <p style="margin-top:32px;"><a href="{{ url_for('blog') }}">&larr; Back to all posts</a></p>
+  </div>
+</section>
+
+{% endblock %}

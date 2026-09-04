@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CoderSpot — {{ month }} roundup</title>
+</head>
+<body style="margin:0; padding:0; background-color:#F6F8FB; font-family:Arial, Helvetica, sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F6F8FB; padding:32px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px; background-color:#FFFFFF; border-radius:12px; overflow:hidden; border:1px solid #E3E8EF;">
+
+          <tr>
+            <td style="padding:28px 32px; border-bottom:1px solid #E3E8EF;">
+              <span style="font-size:20px; font-weight:700; color:#14213D;">CoderSpot</span>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:28px 32px 8px;">
+              <p style="margin:0 0 6px; font-size:12px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#2F6FED;">{{ month }} ROUNDUP</p>
+              <h1 style="margin:0 0 16px; font-size:22px; color:#101828;">This month's programs &amp; contests</h1>
+              {% if intro %}
+              <p style="font-size:15px; color:#475467; line-height:1.6;">{{ intro }}</p>
+              {% endif %}
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:8px 32px 24px;">
+              {% if events %}
+                {% for e in events %}
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px; border:1px solid #E3E8EF; border-radius:8px;">
+                  <tr>
+                    <td style="padding:16px;">
+                      <p style="margin:0 0 4px; font-size:15px; font-weight:600; color:#101828;">{{ e.name }}</p>
+                      <p style="margin:0 0 8px; font-size:13px; color:#475467;">{{ e.window }} &middot; {{ e.format }}</p>
+                      <a href="{{ e.link }}" style="font-size:13px; color:#2F6FED; text-decoration:none; font-weight:600;">Learn more &rarr;</a>
+                    </td>
+                  </tr>
+                </table>
+                {% endfor %}
+              {% else %}
+                <p style="font-size:14px; color:#475467;">No new listings this month — check the full calendar for what's coming up.</p>
+              {% endif %}
+
+              <p style="margin-top:20px;">
+                <a href="{{ url_for('calendar', _external=True) }}" style="display:inline-block; background-color:#14213D; color:#FFFFFF; text-decoration:none; font-size:14px; font-weight:600; padding:12px 22px; border-radius:8px;">See the full calendar</a>
+              </p>
+            </td>
+          </tr>
+
+          {% if testimonials %}
+          <tr>
+            <td style="padding:0 32px 28px;">
+              <p style="margin:0 0 12px; font-size:12px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#98A2B3;">FROM THE COMMUNITY</p>
+              {% for t in testimonials %}
+              <p style="font-size:14px; color:#101828; font-style:italic; margin:0 0 6px;">&ldquo;{{ t.message }}&rdquo;</p>
+              <p style="font-size:12px; color:#98A2B3; margin:0 0 16px;">&mdash; {{ t.name }}</p>
+              {% endfor %}
+            </td>
+          </tr>
+          {% endif %}
+
+          <tr>
+            <td style="padding:20px 32px; background-color:#F6F8FB; border-top:1px solid #E3E8EF;">
+              <p style="margin:0 0 6px; font-size:12px; color:#98A2B3;">You're receiving this because you subscribed at CoderSpot.</p>
+              <p style="margin:0; font-size:12px;"><a href="{{ unsubscribe_url }}" style="color:#98A2B3;">Unsubscribe</a></p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

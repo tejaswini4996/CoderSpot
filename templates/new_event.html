@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Add an Event — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">SITE OWNER VIEW</p>
+    <h1>Add to the calendar</h1>
+    <p class="page-head-sub">Every event belongs to exactly one category — pick whichever fits best below.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="apply-form">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" value="{{ form.get('name', '') }}" required placeholder="e.g. Hacktoberfest, LeetCode Weekly Contest...">
+
+      <label for="kind">Category</label>
+      <select id="kind" name="kind">
+        {% for key, label in kinds.items() %}
+        <option value="{{ key }}" {% if form.get('kind') == key %}selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="month">Month</label>
+      <select id="month" name="month">
+        {% for m in months %}
+        <option value="{{ m }}" {% if form.get('month') == m %}selected{% endif %}>{{ m }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="window">Timing note</label>
+      <input type="text" id="window" name="window" value="{{ form.get('window', '') }}" placeholder="e.g. Applications open, Runs all month...">
+
+      <label for="format">Format</label>
+      <select id="format" name="format">
+        <option value="Remote" {% if form.get('format') == 'Remote' %}selected{% endif %}>Remote</option>
+        <option value="In-person" {% if form.get('format') == 'In-person' %}selected{% endif %}>In-person</option>
+        <option value="Hybrid" {% if form.get('format') == 'Hybrid' %}selected{% endif %}>Hybrid</option>
+      </select>
+
+      <label for="summary">Summary</label>
+      <textarea id="summary" name="summary" rows="3" required placeholder="One or two sentences describing it">{{ form.get('summary', '') }}</textarea>
+
+      <label for="link">Official link</label>
+      <input type="url" id="link" name="link" value="{{ form.get('link', '') }}" required placeholder="https://...">
+
+      <div class="apply-form-actions">
+        <button type="submit" class="btn btn-primary">Add to calendar</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+{% endblock %}
