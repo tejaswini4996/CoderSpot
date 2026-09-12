@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Admin dashboard — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <span class="auth-badge">Site owner</span>
+    <h1>Dashboard</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-value">{{ stats.events }}</div>
+        <div class="stat-label">Events on the calendar</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ stats.applications }}</div>
+        <div class="stat-label">Applications received</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ stats.pending_testimonials }}</div>
+        <div class="stat-label">Testimonials awaiting review</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ stats.subscribers }}</div>
+        <div class="stat-label">Newsletter subscribers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ stats.blog_posts }}</div>
+        <div class="stat-label">Blog posts published</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ stats.feedback }}</div>
+        <div class="stat-label">Feedback submissions</div>
+      </div>
+    </div>
+
+    <div class="admin-link-grid">
+      <a href="{{ url_for('admin_events') }}" class="admin-link-card">
+        <h3>Manage events</h3>
+        <p>Add, review, or remove programs, open source pushes, and contests.</p>
+      </a>
+      <a href="{{ url_for('admin_blogs') }}" class="admin-link-card">
+        <h3>Manage blog</h3>
+        <p>Write and publish posts, or remove any post site-wide (any user can also write their own from their account).</p>
+      </a>
+      <a href="{{ url_for('admin_testimonials') }}" class="admin-link-card">
+        <h3>Review testimonials</h3>
+        <p>Approve or delete stories submitted by visitors.</p>
+      </a>
+      <a href="{{ url_for('admin_applications') }}" class="admin-link-card">
+        <h3>View applications</h3>
+        <p>See everyone who applied to a program through the site.</p>
+      </a>
+      <a href="{{ url_for('admin_subscribers') }}" class="admin-link-card">
+        <h3>Subscribers</h3>
+        <p>See everyone with an account and their subscription status.</p>
+      </a>
+      <a href="{{ url_for('admin_newsletter') }}" class="admin-link-card">
+        <h3>Send monthly newsletter</h3>
+        <p>Compose and send this month's roundup to subscribers.</p>
+      </a>
+      <a href="{{ url_for('admin_feedback') }}" class="admin-link-card">
+        <h3>Feedback inbox</h3>
+        <p>Read suggestions and ideas submitted by visitors.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Manage Blog — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <span class="auth-badge">Site owner</span>
+    <h1>Blog posts</h1>
+    <a href="{{ url_for('new_blog') }}" class="btn btn-primary">+ Write a new post</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if posts %}
+    <div class="admin-testimonial-list">
+      {% for post in posts %}
+      <div class="admin-testimonial-row">
+        <div class="admin-testimonial-body">
+          <strong>{{ post.title }}</strong>
+          <p class="mono" style="margin:6px 0;">By {{ post.author_name }} &middot; {{ post.published_at }} &middot; /blog/{{ post.slug }}</p>
+        </div>
+        <div class="admin-testimonial-actions">
+          <a href="{{ url_for('blog_post', slug=post.slug) }}" target="_blank" class="btn btn-outline">View</a>
+          <form method="POST" action="{{ url_for('delete_blog', post_id=post.id) }}">
+            <button type="submit" class="btn btn-outline">Delete</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>No posts yet — write your first one above.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

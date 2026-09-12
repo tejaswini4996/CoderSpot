@@ -1,0 +1,14 @@
+{% macro apply_button(event, css_class="btn btn-apply", next_url=None) %}
+  {% if current_user %}
+    {% if event.id in applied_event_ids %}
+      <span class="{{ css_class }} btn-applied" aria-disabled="true">Applied &#10003;</span>
+    {% else %}
+      <form method="POST" action="{{ url_for('quick_apply', event_id=event.id) }}" class="quick-apply-form">
+        <input type="hidden" name="next" value="{{ next_url or request.path }}">
+        <button type="submit" class="{{ css_class }}">Apply</button>
+      </form>
+    {% endif %}
+  {% else %}
+    <a href="{{ url_for('apply', event_id=event.id) }}" class="{{ css_class }}">Apply</a>
+  {% endif %}
+{% endmacro %}

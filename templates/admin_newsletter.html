@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}Send newsletter — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <span class="auth-badge">Site owner</span>
+    <h1>Send the monthly newsletter</h1>
+    <p class="page-head-sub">Goes out to {{ subscriber_count }} subscriber(s) as soon as you click send.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if not email_configured %}
+    <div class="flash flash-error">
+      Email isn't set up yet. Add <code>GMAIL_ADDRESS</code> and <code>GMAIL_APP_PASSWORD</code> to your <code>.env</code> file (see <code>.env.example</code> and the setup steps in <code>email_utils.py</code>) before sending.
+    </div>
+    {% endif %}
+
+    <div class="stat-grid" style="margin-bottom:32px;">
+      <div class="stat-card">
+        <div class="stat-value">{{ send_day }}</div>
+        <div class="stat-label">Automatic send day of each month</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">{{ last_sent_month or "—" }}</div>
+        <div class="stat-label">Last automatic/manual send (year-month)</div>
+      </div>
+    </div>
+
+    <form method="POST" style="margin-bottom:40px;" class="apply-form">
+      <input type="hidden" name="form_name" value="update_send_day">
+      <label for="send_day">Change automatic send day (1–28)</label>
+      <div style="display:flex; gap:12px; align-items:center;">
+        <input type="number" id="send_day" name="send_day" value="{{ send_day }}" min="1" max="28" style="max-width:100px;">
+        <button type="submit" class="btn btn-outline">Update</button>
+      </div>
+    </form>
+    <p class="apply-disclaimer" style="margin-top:-24px; margin-bottom:32px;">
+      A background check runs daily while the app is running and sends automatically once, on this day, each month. This only works while <code>app.py</code> stays running — see the README for deploying it somewhere always-on.
+    </p>
+
+    <div class="newsletter-layout">
+      <form method="POST" class="apply-form">
+        <label for="subject">Subject line</label>
+        <input type="text" id="subject" name="subject" value="{{ default_subject }}">
+
+        <label for="intro">Intro message (optional)</label>
+        <textarea id="intro" name="intro" rows="4" placeholder="A short personal note to include at the top of the email"></textarea>
+
+        <div class="apply-form-actions">
+          <button type="submit" class="btn btn-primary" {% if not email_configured or subscriber_count == 0 %}disabled{% endif %}>
+            Send now to {{ subscriber_count }} subscriber(s)
+          </button>
+        </div>
+      </form>
+
+      <div class="newsletter-preview">
+        <h3>This month's roundup ({{ current_month }})</h3>
+        {% if month_events %}
+        <ul>
+          {% for e in month_events %}
+          <li>{{ e.name }} — {{ e.window }}</li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>No events scheduled for {{ current_month }} yet — add some from Manage events first.</p>
+        {% endif %}
+
+        {% if testimonials %}
+        <h3>Testimonials included</h3>
+        <ul>
+          {% for t in testimonials %}
+          <li>&ldquo;{{ t.message[:80] }}{% if t.message|length > 80 %}…{% endif %}&rdquo; — {{ t.name }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if sends %}
+    <div class="send-log">
+      <h3>Send history</h3>
+      {% for s in sends %}
+      <div class="send-log-row">
+        <span>{{ s.subject }}</span>
+        <span>{{ s.recipient_count }} sent &middot; {{ s.sent_at }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

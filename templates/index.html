@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% from "_macros.html" import apply_button with context %}
+{% block title %}CoderSpot — The Coding Opportunity Scoreboard{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <p class="eyebrow">SEASON SCHEDULE &middot; ALL 12 MONTHS</p>
+    <h1 class="hero-title">
+      Every seat at the table<br>
+      has a <span class="accent-gold">deadline.</span>
+    </h1>
+    <p class="hero-sub">
+      CoderSpot tracks the year's coding programs, fellowships, bootcamps
+      and open source pushes &mdash; for underrepresented builders and everyone
+      else building something &mdash; so you never miss your window to apply.
+    </p>
+    <div class="hero-cta">
+      <a href="{{ url_for('calendar') }}" class="btn btn-primary">See the full calendar</a>
+      <span class="hero-stat"><strong>{{ total_programs }}</strong> programs tracked</span>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">BROWSE BY FOCUS</p>
+      <h2>Find what you're looking for</h2>
+    </div>
+
+    <div class="admin-link-grid">
+      <a href="{{ url_for('calendar', focus='open_source') }}" class="admin-link-card">
+        <h3>Open Source</h3>
+        <p>Contribution drives, mentorships, and programs built around open source work.</p>
+      </a>
+      <a href="{{ url_for('calendar', focus='contest') }}" class="admin-link-card">
+        <h3>Hackathon</h3>
+        <p>Time-boxed coding challenges and competitions with real prizes and recognition.</p>
+      </a>
+      <a href="{{ url_for('calendar', focus='women_in_tech') }}" class="admin-link-card">
+        <h3>Women in Tech</h3>
+        <p>Fellowships, bootcamps, and communities built specifically for women in coding.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">ON THE BOARD NOW</p>
+      <h2>{{ current_month }}'s lineup</h2>
+    </div>
+
+    <div class="card-grid">
+      {% for event in featured %}
+      <article class="event-card">
+        <div class="event-card-top">
+          <span class="tag tag-{{ event.kind }}">{{ {'women_in_tech': 'Women in Tech', 'open_source': 'Open Source', 'contest': 'Hackathon'}[event.kind] if event.kind in ('women_in_tech','open_source','contest') else 'Open Source' }}</span>
+          <span class="event-month">{{ event.month }}</span>
+        </div>
+        <h3><a href="{{ url_for('program_detail', event_id=event.id) }}">{{ event.name }}</a></h3>
+        <p class="event-window">{{ event.window }}</p>
+        <p class="event-summary">{{ event.summary }}</p>
+        <div class="event-card-bottom">
+          <span class="tag tag-format">{{ event.format }}</span>
+          <div class="event-card-actions">
+            <div class="add-to-cal">
+              <button type="button" class="btn btn-outline btn-small add-to-cal-toggle">+ Calendar</button>
+              <div class="add-to-cal-menu">
+                <a href="{{ calendar_links[event.id].google_url }}" target="_blank" rel="noopener">Google Calendar</a>
+                <a href="{{ calendar_links[event.id].ics_url }}">Apple / Outlook (.ics)</a>
+              </div>
+            </div>
+            {{ apply_button(event, css_class="btn btn-apply", next_url=url_for('home')) }}
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section band">
+  <div class="wrap band-inner">
+    <h2>Every month is a new round.</h2>
+    <p>From application windows to program kickoffs, the calendar lays out the whole year at a glance.</p>
+    <a href="{{ url_for('calendar') }}" class="btn btn-outline">Browse the full year</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">REAL RESULTS</p>
+      <h2>How CoderSpot is helping people</h2>
+    </div>
+
+    {% if testimonials %}
+    <div class="testimonial-grid">
+      {% for t in testimonials %}
+      <blockquote class="testimonial-card">
+        <p class="testimonial-message">&ldquo;{{ t.message }}&rdquo;</p>
+        <footer class="testimonial-footer">
+          <span class="testimonial-name">{{ t.name }}</span>
+          {% if t.program_name %}
+          <span class="testimonial-program">{{ t.program_name }}</span>
+          {% endif %}
+        </footer>
+      </blockquote>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>No stories yet &mdash; be the first to share how the site helped you.</p>
+    {% endif %}
+
+    <div class="testimonial-cta">
+      <a href="{{ url_for('testimonials') }}" class="btn btn-outline">Read more &amp; share your story</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

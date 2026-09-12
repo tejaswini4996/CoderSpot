@@ -1,0 +1,5 @@
+.env
+coderspot.db
+__pycache__/
+*.pyc
+.DS_Store

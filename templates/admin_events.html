@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Manage Events — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">SITE OWNER VIEW</p>
+    <h1>Manage the calendar</h1>
+    <p class="page-head-sub">
+      Add programs, open source pushes, or coding contests, and they'll
+      appear on the Calendar and Home pages right away.
+    </p>
+    <a href="{{ url_for('new_event') }}" class="btn btn-primary">+ Add a new event</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if events %}
+    <div class="admin-testimonial-list">
+      {% for e in events %}
+      <div class="admin-testimonial-row">
+        <div class="admin-testimonial-body">
+          <div class="admin-testimonial-top">
+            <strong>{{ e.name }}</strong>
+            <span class="tag tag-{{ e.kind }}">{{ kinds.get(e.kind, 'Open Source') }}</span>
+            <span class="mono">{{ e.month }}</span>
+          </div>
+          <p class="testimonial-message-admin">{{ e.summary }}</p>
+          <a href="{{ e.link }}" target="_blank" rel="noopener" class="event-link">{{ e.link }}</a>
+        </div>
+        <div class="admin-testimonial-actions">
+          <form method="POST" action="{{ url_for('delete_event', event_id=e.id) }}">
+            <button type="submit" class="btn btn-outline">Delete</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>No events yet — add your first one above.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

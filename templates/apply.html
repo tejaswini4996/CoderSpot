@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Apply — {{ event.name }} — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">APPLYING TO</p>
+    <h1>{{ event.name }}</h1>
+    <p class="page-head-sub">{{ event.summary }}</p>
+  </div>
+</section>
+
+<section class="section apply-section">
+  <div class="wrap">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="apply-form">
+      <label for="name">Your name</label>
+      <input type="text" id="name" name="name" value="{{ name }}" required>
+
+      <label for="email">Your email</label>
+      <input type="email" id="email" name="email" value="{{ email }}" required>
+
+      <label for="note">Anything you'd like to add? (optional)</label>
+      <textarea id="note" name="note" rows="4">{{ note }}</textarea>
+
+      <div class="apply-form-actions">
+        <button type="submit" class="btn btn-primary">Submit application</button>
+        <a href="{{ event.link }}" target="_blank" rel="noopener" class="apply-official-link">
+          Or apply directly on the official site &rarr;
+        </a>
+      </div>
+    </form>
+
+    <p class="apply-disclaimer">
+      Submitting this form saves your details on this site so the site owner
+      can follow up with you &mdash; it does not submit anything to
+      {{ event.name }} itself. You'll still need to complete the official
+      application on their website.
+    </p>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Applications — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">SITE OWNER VIEW</p>
+    <h1>Applications received</h1>
+    <p class="page-head-sub">
+      {{ applications|length }} total. This page is not password-protected —
+      see the note in <code>app.py</code> before putting the site online.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if applications %}
+    <div class="table-wrap">
+      <table class="applications-table">
+        <thead>
+          <tr>
+            <th>Submitted</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Program</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in applications %}
+          <tr>
+            <td class="mono">{{ a.submitted_at }}</td>
+            <td>{{ a.applicant_name }}</td>
+            <td><a href="mailto:{{ a.applicant_email }}">{{ a.applicant_email }}</a></td>
+            <td>{{ a.event_name }}</td>
+            <td>{{ a.note or "—" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p>No applications yet — they'll show up here as people submit the form on each program's page.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}
