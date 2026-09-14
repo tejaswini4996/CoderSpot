@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Blog — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">FROM THE TEAM</p>
+    <h1>Blog</h1>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    {% if posts %}
+    <div class="admin-testimonial-list">
+      {% for post in posts %}
+      <a href="{{ url_for('blog_post', slug=post.slug) }}" class="admin-link-card">
+        <h3>{{ post.title }}</h3>
+        <p class="mono" style="margin-bottom:8px;">By {{ post.author_name }} &middot; {{ post.published_at }}</p>
+        <p>{{ post.body[:160] }}{% if post.body|length > 160 %}…{% endif %}</p>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>No posts yet — check back soon.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

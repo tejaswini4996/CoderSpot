@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Sign up — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap auth-wrap">
+    <p class="eyebrow">CREATE YOUR ACCOUNT</p>
+    <h1>Join CoderSpot</h1>
+    <p class="page-head-sub">Get the month's programs, open source pushes, and coding contests in one email.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap auth-wrap">
+    <div class="auth-card">
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% if google_configured or github_configured %}
+      <div class="oauth-buttons">
+        {% if google_configured %}
+        <a href="{{ url_for('login_google') }}" class="btn btn-outline btn-oauth">Continue with Google</a>
+        {% endif %}
+        {% if github_configured %}
+        <a href="{{ url_for('login_github') }}" class="btn btn-outline btn-oauth">Continue with GitHub</a>
+        {% endif %}
+      </div>
+      <div class="auth-divider"><span>or</span></div>
+      {% endif %}
+
+      <form method="POST" class="apply-form">
+        <label for="name">Full name</label>
+        <input type="text" id="name" name="name" value="{{ name }}" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="{{ email }}" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required minlength="8">
+
+        <label for="confirm">Confirm password</label>
+        <input type="password" id="confirm" name="confirm" required minlength="8">
+
+        <div class="apply-form-actions">
+          <button type="submit" class="btn btn-primary">Create account</button>
+        </div>
+      </form>
+    </div>
+
+    <p class="auth-switch">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+  </div>
+</section>
+
+{% endblock %}

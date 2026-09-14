@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Feedback — CoderSpot Admin{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <span class="auth-badge">Site owner</span>
+    <h1>Feedback inbox</h1>
+    <p class="page-head-sub">{{ feedback_list|length }} submission(s).</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if feedback_list %}
+    <div class="admin-testimonial-list">
+      {% for f in feedback_list %}
+      <div class="admin-testimonial-row">
+        <div class="admin-testimonial-body">
+          <div class="admin-testimonial-top">
+            <strong>{{ f.name or "Anonymous" }}</strong>
+            {% if f.email %}<span class="mono">{{ f.email }}</span>{% endif %}
+            <span class="mono">{{ f.submitted_at }}</span>
+          </div>
+          <p class="testimonial-message-admin">{{ f.message }}</p>
+        </div>
+        <div class="admin-testimonial-actions">
+          {% if f.email %}
+          <a href="mailto:{{ f.email }}" class="btn btn-outline">Reply</a>
+          {% endif %}
+          <form method="POST" action="{{ url_for('delete_feedback', feedback_id=f.id) }}">
+            <button type="submit" class="btn btn-outline">Delete</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>No feedback submitted yet.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

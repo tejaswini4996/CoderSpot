@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Feedback — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap auth-wrap">
+    <p class="eyebrow">WE'RE LISTENING</p>
+    <h1>Got a suggestion?</h1>
+    <p class="page-head-sub">Missing a program, a feature idea, something broken — tell us anything. We read every submission.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap auth-wrap">
+    <div class="auth-card">
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" class="apply-form">
+        <label for="name">Your name (optional)</label>
+        <input type="text" id="name" name="name" value="{{ name }}">
+
+        <label for="email">Your email (optional, in case we want to follow up)</label>
+        <input type="email" id="email" name="email" value="{{ email }}">
+
+        <label for="message">Your suggestion</label>
+        <textarea id="message" name="message" rows="6" required placeholder="What would make CoderSpot better?">{{ message }}</textarea>
+
+        <div class="apply-form-actions">
+          <button type="submit" class="btn btn-primary">Send feedback</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

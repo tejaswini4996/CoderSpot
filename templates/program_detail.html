@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% from "_macros.html" import apply_button with context %}
+{% block title %}{{ event.name }} — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap" style="max-width:720px;">
+    <p class="eyebrow">{{ event.month|upper }} &middot; {{ kind_label|upper }}</p>
+    <h1>{{ event.name }}</h1>
+    <div style="margin:14px 0;">
+      <span class="tag tag-{{ event.kind }}">{{ kind_label }}</span>
+      <span class="tag tag-format">{{ event.format }}</span>
+    </div>
+    <p class="page-head-sub">{{ event.window }}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap" style="max-width:720px;">
+    <p style="font-size:1.02rem; color:var(--text-1);">{{ event.summary }}</p>
+
+    <div class="apply-form-actions" style="margin-top:32px;">
+      {{ apply_button(event, css_class="btn btn-primary", next_url=url_for('program_detail', event_id=event.id)) }}
+
+      <div class="add-to-cal">
+        <button type="button" class="btn btn-outline add-to-cal-toggle">+ Add to Calendar</button>
+        <div class="add-to-cal-menu">
+          <a href="{{ calendar_links.google_url }}" target="_blank" rel="noopener">Google Calendar</a>
+          <a href="{{ calendar_links.ics_url }}">Apple / Outlook (.ics)</a>
+        </div>
+      </div>
+
+      <a href="{{ event.link }}" target="_blank" rel="noopener" class="apply-official-link">Official site &rarr;</a>
+    </div>
+
+    <p style="margin-top:40px;"><a href="{{ url_for('calendar') }}">&larr; Back to full calendar</a></p>
+  </div>
+</section>
+
+<script src="{{ url_for('static', filename='js/filter.js') }}"></script>
+{% endblock %}

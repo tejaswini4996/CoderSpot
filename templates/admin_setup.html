@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Admin setup — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap auth-wrap">
+    <span class="auth-badge">Site owner only</span>
+    <h1>Create admin account</h1>
+    <p class="page-head-sub">This page is not linked anywhere and stops working once an admin account exists, unless you include your secret key in the URL.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap auth-wrap">
+    <div class="auth-card">
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" class="apply-form">
+        <input type="hidden" name="key" value="{{ key }}">
+
+        <label for="email">Admin email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Password (min 8 characters)</label>
+        <input type="password" id="password" name="password" required minlength="8">
+
+        <label for="confirm">Confirm password</label>
+        <input type="password" id="confirm" name="confirm" required minlength="8">
+
+        <div class="apply-form-actions">
+          <button type="submit" class="btn btn-primary">Create admin account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

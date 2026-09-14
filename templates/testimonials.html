@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Testimonials — CoderSpot{% endblock %}
+
+{% block content %}
+
+<section class="page-head">
+  <div class="wrap">
+    <p class="eyebrow">REAL RESULTS</p>
+    <h1>Stories from people who found their program here</h1>
+    <p class="page-head-sub">
+      Landed an internship, made your first open source contribution, got
+      into a bootcamp? Tell us how CoderSpot helped &mdash; it might be the
+      nudge someone else needs to apply.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if testimonials %}
+    <div class="testimonial-grid">
+      {% for t in testimonials %}
+      <blockquote class="testimonial-card">
+        <p class="testimonial-message">&ldquo;{{ t.message }}&rdquo;</p>
+        <footer class="testimonial-footer">
+          <span class="testimonial-name">{{ t.name }}</span>
+          {% if t.program_name %}
+          <span class="testimonial-program">{{ t.program_name }}</span>
+          {% endif %}
+        </footer>
+      </blockquote>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>No stories yet &mdash; be the first to share yours below.</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="section band">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">SHARE YOURS</p>
+      <h2>Post a testimonial</h2>
+    </div>
+
+    <form method="POST" class="apply-form">
+      <label for="name">Your name</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="program_name">Which program? (optional)</label>
+      <input type="text" id="program_name" name="program_name" placeholder="e.g. Outreachy, Hacktoberfest...">
+
+      <label for="message">How did CoderSpot help you?</label>
+      <textarea id="message" name="message" rows="4" required></textarea>
+
+      <div class="apply-form-actions">
+        <button type="submit" class="btn btn-primary">Submit testimonial</button>
+      </div>
+    </form>
+
+    <p class="apply-disclaimer">
+      Submitted testimonials are reviewed before they appear publicly, so
+      yours won't show up immediately &mdash; that's expected.
+    </p>
+  </div>
+</section>
+
+{% endblock %}
